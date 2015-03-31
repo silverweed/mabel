@@ -13,18 +13,16 @@ var paths = {
 
 // Coffeescript-React
 gulp.task('cjsx', function () {
-	gulp.src(paths.coffee)
+	return gulp.src(paths.coffee)
 		.pipe(cjsx({ bare: false }).on('error', gutil.log))
-		.pipe(gulp.dest('static/js'))
-		.once('end', function () { process.exit(); });
+		.pipe(gulp.dest('static/js'));
 });
 
 // Scss
 gulp.task('sass', function () {
-	gulp.src(paths.scss)
+	return gulp.src(paths.scss)
 		.pipe(sass().on('error', gutil.log))
-		.pipe(gulp.dest('static/css'))
-		.once('end', function () { process.exit(); });
+		.pipe(gulp.dest('static/css'));
 });
 
 // Compass
