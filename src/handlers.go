@@ -24,26 +24,6 @@ func httpHome(rw http.ResponseWriter, req *http.Request) {
 	if session.IsNew {
 		fmt.Fprintf(rw, homeHTML)
 	} else {
-		fmt.Fprintf(rw, "You are logged in as %s\n", session.Values["name"])
+		fmt.Fprintf(rw, "<!DOCTYPE html><html><body><p>You are logged in as %s</p><form action='/logout' method='POST'><input type='submit' value='logout'/></form></body></html>\n", session.Values["name"])
 	}
-}
-
-func loginHandler(rw http.ResponseWriter, req *http.Request) {
-	session, _ := store.Get(req, "session")
-	name := req.PostFormValue("name")
-	if len(name) < 1 {
-		panic("name.length < 1")
-	}
-	session.Values["name"] = name
-	err := session.Save(req, rw)
-	if err != nil {
-		panic(err)
-	}
-	http.Redirect(rw, req, "/", http.StatusMovedPermanently)
-}
-
-func logoutHandler(rw http.ResponseWriter, req *http.Request) {
-	session, _ := store.Get(req, "session")
-	sessionDestroy(session, req, rw)
-	http.Redirect(rw, req, "/", http.StatusMovedPermanently)
 }
