@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 // Main site configuration
@@ -23,6 +24,17 @@ func setupHandlers(router *mux.Router) {
 
 	POST.HandleFunc("/login", loginHandler)
 	POST.HandleFunc("/logout", logoutHandler)
+}
+
+func dontListDirs(h http.Handler) http.HandlerFunc {
+	return http.HandlerFunc(
+		func(w http.ResponseWriter, r *http.Request) {
+			if strings.HasSuffix(r.URL.Path, "/") {
+				http.Error(w, "Forbidden", http.StatusForbidden)
+				return
+			}
+			h.ServeHTTP(w, r)
+		})
 }
 
 func main() {
@@ -50,6 +62,8 @@ func main() {
 	router := mux.NewRouter()
 	setupHandlers(router)
 	http.Handle("/", router)
+	http.Handle("/static/", dontListDirs(http.StripPrefix("/static/",
+		http.FileServer(http.Dir(mabelRoot+"/static")))))
 	log.Printf("Listening on %s\r\nServer root: %s\r\n", *bind, mabelRoot)
 	http.ListenAndServe(*bind, nil)
 }

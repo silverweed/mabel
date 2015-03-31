@@ -1,6 +1,7 @@
 mabel
 node_modules
 static/js
+static/jsx
 static/css
 *~
 *.swp

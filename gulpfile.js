@@ -7,15 +7,23 @@ var gutil = require('gulp-util');
 var path = require('path');
 
 var paths = {
-	coffee: 'static/src/coffee/*.{cjsx,coffee}',
+	coffee: 'static/src/coffee/*.coffee',
+	cjsx: 'static/src/cjsx/*.cjsx',
 	scss: 'static/src/scss/*.scss'
 };
 
-// Coffeescript-React
-gulp.task('cjsx', function () {
+// Coffeescript
+gulp.task('coffee', function () {
 	return gulp.src(paths.coffee)
 		.pipe(cjsx({ bare: false }).on('error', gutil.log))
 		.pipe(gulp.dest('static/js'));
+});
+
+// Coffeescript-React
+gulp.task('cjsx', function () {
+	return gulp.src(paths.cjsx)
+		.pipe(cjsx({ bare: false }).on('error', gutil.log))
+		.pipe(gulp.dest('static/jsx'));
 });
 
 // Scss
@@ -36,7 +44,9 @@ gulp.task('sass', function () {
 		.pipe(gulp.dest('static/css'));
 });*/
 
+// FIXME
 gulp.task('watch', function () {
-	gulp.watch(paths.coffee, ['cjsx']);
+	gulp.watch(paths.coffee, ['coffee']);
+	gulp.watch(paths.cjsx, ['cjsx']);
 	gulp.watch(paths.scss, ['sass']);
 });
