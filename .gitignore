@@ -5,3 +5,5 @@ static/jsx
 static/css
 *~
 *.swp
+deps
+gulp
