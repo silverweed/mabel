@@ -44,7 +44,7 @@ gulp.task('sass', function () {
 		.pipe(gulp.dest('static/css'));
 });*/
 
-// FIXME
+gulp.task('build', ['coffee', 'cjsx', 'sass']);
 gulp.task('watch', function () {
 	gulp.watch(paths.coffee, ['coffee']);
 	gulp.watch(paths.cjsx, ['cjsx']);
