@@ -5,8 +5,9 @@ type MabelConf struct {
 }
 
 type User struct {
-	Name   string     `json:"name"`
-	Status UserStatus `json:"status"`
+	Name     string `json:"name"`
+	Password []byte
+	Status   UserStatus `json:"status"`
 }
 
 type UserStatus struct {

@@ -12,9 +12,16 @@ import (
 	"strings"
 )
 
-// Main site configuration
-var mabelConf MabelConf
-var mabelRoot string
+var (
+	// Main site configuration
+	mabelConf MabelConf
+	// www root
+	mabelRoot string
+	// Database
+	db Database
+	// Users manager
+	users Users
+)
 
 func setupHandlers(router *mux.Router) {
 	GET := router.Methods("GET", "HEAD").Subrouter()
@@ -48,8 +55,8 @@ func main() {
 
 	// Command line parameters
 	bind := flag.String("port", ":8000", "Address to bind to")
-	//mongo := flag.String("dburl", "localhost", "MongoDB servers, separated by comma")
-	//dbname := flag.String("dbname", "mabel", "MongoDB database to use")
+	mongo := flag.String("dburl", "localhost", "MongoDB servers, separated by comma")
+	dbname := flag.String("dbname", "mabel", "MongoDB database to use")
 	flag.StringVar(&mabelRoot, "root", mabelRoot, "The HTTP server root directory")
 	flag.Parse()
 
@@ -59,7 +66,11 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
 	initSessions()
+	db = InitDatabase(*mongo, *dbname)
+	users = Users{db}
+
 	router := mux.NewRouter()
 	setupHandlers(router)
 	http.Handle("/", router)

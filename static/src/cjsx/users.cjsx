@@ -4,7 +4,7 @@
 window.UserWidget = React.createClass {
 	getInitialState: ->
 		return {
-			user: {}
+			user: null
 		}
 
 	componentDidMount: ->
@@ -17,7 +17,7 @@ window.UserWidget = React.createClass {
 		).bind this
 
 	render: ->
-		if @state.user?.status?.authenticated
+		if @state.user?.status.authenticated
 			return (
 				<div>
 				    <h3>{@state.user.name}</h3>

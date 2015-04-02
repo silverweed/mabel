@@ -35,8 +35,19 @@ func sessionDestroy(sess *sessions.Session, req *http.Request, rw http.ResponseW
 func apiLogin(rw http.ResponseWriter, req *http.Request) {
 	session, _ := store.Get(req, SESSION_NAME)
 	name := req.PostFormValue("name")
+	password := req.PostFormValue("password")
 	if len(name) < 1 {
 		http.Error(rw, "Name must have at least 1 character", http.StatusBadRequest)
+		return
+	}
+	if len(password) < 1 {
+		http.Error(rw, "Empty password supplied", http.StatusBadRequest)
+		return
+	}
+	// TODO: Validate login
+	if !users.Login(name, password) {
+		sessionDestroy(session, req, rw)
+		http.Error(rw, "Invalid credentials", http.StatusUnauthorized)
 		return
 	}
 	session.Values["name"] = name
