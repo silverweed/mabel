@@ -22,8 +22,9 @@ func setupHandlers(router *mux.Router) {
 
 	GET.HandleFunc("/", httpHome)
 
-	POST.HandleFunc("/login", loginHandler)
-	POST.HandleFunc("/logout", logoutHandler)
+	POST.HandleFunc("/login", apiLogin)
+	POST.HandleFunc("/logout", apiLogout)
+	POST.HandleFunc("/userdata", apiUserData)
 }
 
 func dontListDirs(h http.Handler) http.HandlerFunc {

@@ -2,11 +2,25 @@
  Components for managing login and user preferences
 ###
 window.UserWidget = React.createClass {
+	getInitialState: ->
+		return {
+			user: {}
+		}
+
+	componentDidMount: ->
+		qwest.post(@props.source).then ((resp) ->
+			if @isMounted()
+				data = JSON.parse resp
+				@setState {
+					user: data
+				}
+		).bind this
+
 	render: ->
-		if @props.user?.authenticated
+		if @state.user?.status?.authenticated
 			return (
 				<div>
-				    <h3>{@props.user.name}</h3>
+				    <h3>{@state.user.name}</h3>
 				    <form method='POST' action='/logout'>
 				        <input type='submit' value='Log out'/>
 				    </form>

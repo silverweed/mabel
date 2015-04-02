@@ -1,10 +1,14 @@
 package main
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/gorilla/securecookie"
 	"github.com/gorilla/sessions"
 	"net/http"
 )
+
+const SESSION_NAME = "session"
 
 var store = sessions.NewCookieStore(
 	securecookie.GenerateRandomKey(32),
@@ -28,11 +32,11 @@ func sessionDestroy(sess *sessions.Session, req *http.Request, rw http.ResponseW
 	sess.Save(req, rw)
 }
 
-func loginHandler(rw http.ResponseWriter, req *http.Request) {
-	session, _ := store.Get(req, "session")
+func apiLogin(rw http.ResponseWriter, req *http.Request) {
+	session, _ := store.Get(req, SESSION_NAME)
 	name := req.PostFormValue("name")
 	if len(name) < 1 {
-		http.Error(rw, "Name length < 1", http.StatusBadRequest)
+		http.Error(rw, "Name must have at least 1 character", http.StatusBadRequest)
 		return
 	}
 	session.Values["name"] = name
@@ -43,8 +47,28 @@ func loginHandler(rw http.ResponseWriter, req *http.Request) {
 	http.Redirect(rw, req, "/", http.StatusMovedPermanently)
 }
 
-func logoutHandler(rw http.ResponseWriter, req *http.Request) {
-	session, _ := store.Get(req, "session")
+func apiLogout(rw http.ResponseWriter, req *http.Request) {
+	session, _ := store.Get(req, SESSION_NAME)
 	sessionDestroy(session, req, rw)
 	http.Redirect(rw, req, "/", http.StatusMovedPermanently)
+}
+
+func apiUserData(rw http.ResponseWriter, req *http.Request) {
+	session, _ := store.Get(req, SESSION_NAME)
+	user := User{
+		Status: UserStatus{
+			Authenticated: false,
+		},
+		Name: "",
+	}
+	if !session.IsNew {
+		user.Status.Authenticated = true
+		user.Name, _ = session.Values["name"].(string)
+	}
+	jsondata, err := json.Marshal(user)
+	if err != nil {
+		http.Error(rw, "Internal server error", http.StatusInternalServerError)
+		return
+	}
+	fmt.Fprintln(rw, string(jsondata))
 }
