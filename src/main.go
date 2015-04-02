@@ -46,7 +46,7 @@ func main() {
 	mabelRoot = filepath.Dir(exec)
 
 	// Command line parameters
-	bind := flag.String("port", ":8080", "Address to bind to")
+	bind := flag.String("port", ":8000", "Address to bind to")
 	//mongo := flag.String("dburl", "localhost", "MongoDB servers, separated by comma")
 	//dbname := flag.String("dbname", "mabel", "MongoDB database to use")
 	flag.StringVar(&mabelRoot, "root", mabelRoot, "The HTTP server root directory")

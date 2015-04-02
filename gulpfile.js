@@ -45,8 +45,9 @@ gulp.task('sass', function () {
 });*/
 
 gulp.task('build', ['coffee', 'cjsx', 'sass']);
+// FIXME: crashes on error!
 gulp.task('watch', function () {
-	gulp.watch(paths.coffee, ['coffee']);
-	gulp.watch(paths.cjsx, ['cjsx']);
-	gulp.watch(paths.scss, ['sass']);
+	gulp.watch(paths.coffee, ['coffee']).on('error', gutil.log);
+	gulp.watch(paths.cjsx, ['cjsx']).on('error', gutil.log);
+	gulp.watch(paths.scss, ['sass']).on('error', gutil.log);
 });

@@ -1,8 +1,13 @@
-<div id='content'></div>
 <script src="static/jsx/home.js"></script>
+<script src="static/jsx/users.js"></script>
 <script>
+var container = document.getElementById('container')
+/*React.render(
+    React.createElement(Header, {name: "World"}),
+    container
+);*/
 React.render(
-	React.createElement(Greeting, {name: "World"}),
-	document.getElementById('container')
+    React.createElement(UserWidget),
+    container
 );
 </script>

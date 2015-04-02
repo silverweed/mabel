@@ -1,3 +1,3 @@
-window.Greeting = React.createClass {
-	render: -> return <p className="greeting">Hello, {@props.name}</p>
+window.Header = React.createClass {
+	render: -> return <div className="header">Hello, {@props.name}</div>
 }
