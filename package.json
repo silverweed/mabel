@@ -4,7 +4,7 @@
 	"dependencies": {},
 	"devDependencies": {
 		"gulp": "*",
-		"gulp-sass": "*",
+		"gulp-sass": ">=2.0.0",
 		"gulp-cjsx": "*",
 		"gulp-util": "*"
 	},
