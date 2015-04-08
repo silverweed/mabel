@@ -1,7 +1,8 @@
 package main
 
 type MabelConf struct {
-	Title string
+	Title   string
+	DataDir string
 }
 
 type User struct {
