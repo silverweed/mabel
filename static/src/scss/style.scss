@@ -1,0 +1,15 @@
+a.nohref {
+	cursor: pointer;
+	font-size: small;
+	text-decoration: underline;
+	margin: 5px auto;
+}
+
+.widget {
+	text-align: center;
+	padding: 5px;
+	float: left;
+	.title {
+		margin: 5px auto;
+	}
+}

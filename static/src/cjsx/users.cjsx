@@ -3,9 +3,7 @@
 ###
 window.UserWidget = React.createClass {
 	getInitialState: ->
-		return {
-			user: null
-		}
+		{ user: null }
 
 	componentDidMount: ->
 		# Retreive user data from the server
@@ -19,51 +17,75 @@ window.UserWidget = React.createClass {
 
 	render: ->
 		if @state.user?.status.authenticated
-			return (
-				<div>
-				    <h3>{@state.user.name}</h3>
-				    <form method='POST' action='/logout'>
-				        <input type='submit' value='Log out'/>
-				    </form>
-				</div>
-			)
+			<div>
+			    <h3>{@state.user.name}</h3>
+			    <form method='POST' action='/logout'>
+			        <input type='submit' value='Log out'/>
+			    </form>
+			</div>
 		else
-			return (
-				<div>
-				    <LoginButton />
-				</div>
-			)
+			<div>
+			    <LoginButton />
+			</div>
 }
 
 LoginButton = React.createClass {
 	getInitialState: ->
-		return { toggled: false }
+		{
+			toggled: no
+			regToggled: no
+		}
 
 	render: ->
 		if @state.toggled
-			return (
-				<div>
-				    <form method='POST' action='/login'>
-				        <input type='text'
-				               name='name'
-				               placeholder='Username'/>
-				        <br/>
-				        <input type='password'
-				               name='password'
-				               placeholder='Password'/>
-				        <br/>
-				        <input type='submit'
-				               value='Submit'/>
-				        <button onClick={@toggle}>Cancel</button>
-				    </form>
-				</div>
-			)
+			<div className='widget'>
+			    <h4 className='title'>{@title()}</h4>
+			    <form method='POST' action={@action()}>
+			        <input type='text'
+			               name='name'
+			               placeholder='Username'/>
+			        <br/>
+			        <input type='password'
+			               name='password'
+			               placeholder='Password'/>
+			        <br/>
+			        <RegisterInputs toggled={@state.regToggled} onClick={@showReg}/>
+			        <br/>
+			        <input type='submit'
+			               value='Submit'/>
+			        <button onClick={@toggle}>Cancel</button>
+			    </form>
+			</div>
 		else
-			return (
-				<div>
-				    <button onClick={@toggle}>Login</button>
-				</div>
-			)
+			<div>
+			    <button onClick={@toggle}>Login</button>
+			</div>
 
-	toggle: -> @setState({ toggled: !@state.toggled })
+	toggle: ->
+		@setState {
+			toggled: !@state.toggled
+			regToggled: no
+		}
+
+	showReg: -> @setState { regToggled: yes }
+	title: -> if @state.regToggled then 'Register' else 'Login'
+	action: -> if @state.regToggled then '/register' else '/login'
+}
+
+RegisterInputs = React.createClass {
+	render: ->
+		if @props.toggled
+			<div>
+			    <input type='password'
+			           name='confirmpassword'
+			           placeholder='Confirm password'/>
+			    <br/>
+			    <input type='text'
+			           name='email'
+			           placeholder='Email address'/>
+			</div>
+		else
+			<a className='nohref' onClick={@props.onClick}>
+			Need an account?
+			</a>
 }
