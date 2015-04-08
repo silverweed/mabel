@@ -6,6 +6,7 @@
 package main
 
 import (
+	"golang.org/x/crypto/bcrypt"
 	"log"
 	"runtime/debug"
 )
@@ -29,6 +30,6 @@ func (u Users) Login(username, password string) bool {
 // validate checks if a provided (non-hashed) password
 // matches a hashed value stored in the db
 func (u Users) validate(provided string, valid []byte) bool {
-	// TODO: insert cool crypto algorithm here
-	return true
+	err := bcrypt.CompareHashAndPassword(valid, []byte(provided))
+	return err == nil
 }

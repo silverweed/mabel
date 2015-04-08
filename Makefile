@@ -8,6 +8,7 @@ deps:
 	go get github.com/gorilla/securecookie
 	go get github.com/gorilla/sessions
 	go get gopkg.in/mgo.v2
+	go get golang.org/x/crypto/bcrypt
 	touch deps
 
 gulp:
