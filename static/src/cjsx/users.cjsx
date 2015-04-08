@@ -8,6 +8,7 @@ window.UserWidget = React.createClass {
 		}
 
 	componentDidMount: ->
+		# Retreive user data from the server
 		qwest.post(@props.source).then ((resp) ->
 			if @isMounted()
 				data = JSON.parse resp

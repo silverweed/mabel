@@ -32,6 +32,9 @@ func sessionDestroy(sess *sessions.Session, req *http.Request, rw http.ResponseW
 	sess.Save(req, rw)
 }
 
+// apiLogin is used to respond to authentication requests.
+// The login validation itself is performed by users.Login
+// in users.go.
 func apiLogin(rw http.ResponseWriter, req *http.Request) {
 	session, _ := store.Get(req, SESSION_NAME)
 	name := req.PostFormValue("name")
@@ -44,12 +47,13 @@ func apiLogin(rw http.ResponseWriter, req *http.Request) {
 		http.Error(rw, "Empty password supplied", http.StatusBadRequest)
 		return
 	}
-	// TODO: Validate login
+	// Validate login
 	if !users.Login(name, password) {
 		sessionDestroy(session, req, rw)
 		http.Error(rw, "Invalid credentials", http.StatusUnauthorized)
 		return
 	}
+	// Save session values
 	session.Values["name"] = name
 	err := session.Save(req, rw)
 	if err != nil {
@@ -64,6 +68,8 @@ func apiLogout(rw http.ResponseWriter, req *http.Request) {
 	http.Redirect(rw, req, "/", http.StatusMovedPermanently)
 }
 
+// apiUserData is used to retreive some session data by the client
+// via AJAX, like authentication status and username.
 func apiUserData(rw http.ResponseWriter, req *http.Request) {
 	session, _ := store.Get(req, SESSION_NAME)
 	user := User{
