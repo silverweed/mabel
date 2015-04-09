@@ -8,6 +8,7 @@ import (
 
 type InviteCode struct {
 	Code     string
+	Used     bool
 	Referral bson.ObjectId
 	Account  bson.ObjectId
 }
@@ -21,6 +22,7 @@ func (db Database) UseInviteCode(icode string, usedBy bson.ObjectId) error {
 	op := mgo.Change{
 		Update: bson.M{
 			"account": usedBy,
+			"used":    true,
 		},
 	}
 	var doc InviteCode

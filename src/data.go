@@ -18,6 +18,7 @@ type UserData struct {
 	Name     string        `json:"name"`
 	Password []byte
 	Email    string
+	Invite   bson.ObjectId
 }
 
 type UserStatus struct {
