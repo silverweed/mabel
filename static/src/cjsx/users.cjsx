@@ -20,7 +20,7 @@ window.UserWidget = React.createClass {
                         <div>
                             <h3>{@state.user.name}</h3>
                             <form method='POST' action='/logout'>
-                                <input type='submit' value='Log out'/>
+                                <button type='submit'>Log out</button>
                             </form>
                         </div>
                 else
@@ -31,16 +31,13 @@ window.UserWidget = React.createClass {
 
 LoginButton = React.createClass {
         getInitialState: ->
-                {
-                        toggled: no
-                        regToggled: no
-                }
+                { toggled: no }
 
         render: ->
                 if @state.toggled
                         <div className='widget'>
-                            <h4 className='title'>{@title()}</h4>
-                            <form method='POST' action={@action()} name="login-form">
+                            <h4 className='title'>Login</h4>
+                            <form method='POST' action="/login" name="login-form">
                                 <input type='text'
                                        name='name'
                                        placeholder='Username'/>
@@ -49,50 +46,12 @@ LoginButton = React.createClass {
                                        name='password'
                                        placeholder='Password'/>
                                 <br/>
-                                <RegisterInputs toggled={@state.regToggled} onClick={@showReg}/>
-                                <br/>
-                                <input type='submit'
-                                       value='Submit'
-                                       onClick={@onSubmit}/>
-                                <button onClick={@toggle}>Cancel</button>
+                                <button type='submit'>Sign in</button>
+                                <button type="button" onClick={@toggle}>Cancel</button>
                             </form>
                         </div>
                 else
-                        <div>
-                            <button onClick={@toggle}>Login</button>
-                        </div>
-
+                        <a href="#" onClick={@toggle}>Login</a>
         toggle: ->
-                @setState {
-                        toggled: !@state.toggled
-                        regToggled: no
-                }
-
-        showReg: -> @setState { regToggled: yes }
-        title: -> if @state.regToggled then 'Register' else 'Login'
-        action: -> if @state.regToggled then '/register' else '/login'
-        onSubmit: ->
-                checkEmailField document.forms["login-form"]['email']
-}
-
-RegisterInputs = React.createClass {
-        render: ->
-                if @props.toggled
-                        <div>
-                            <input type='password'
-                                   name='confirmpassword'
-                                   placeholder='Confirm password'/>
-                            <br/>
-                            <input type='text'
-                                   name='invitecode'
-                                   placeholder='Your invite code'/>
-                            <br/>
-                            <input type='text'
-                                   name='email'
-                                   placeholder='Email address'/>
-                        </div>
-                else
-                        <a className='nohref' onClick={@props.onClick}>
-                        Need an account?
-                        </a>
+                @setState { toggled: !@state.toggled }
 }
