@@ -17,7 +17,7 @@ func (db Database) GetInviteCode(icode string) (code *InviteCode, err error) {
 	return
 }
 
-func (db *Database) UseInviteCode(icode string, usedBy bson.ObjectId) error {
+func (db Database) UseInviteCode(icode string, usedBy bson.ObjectId) error {
 	op := mgo.Change{
 		Update: bson.M{
 			"account": usedBy,
