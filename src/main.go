@@ -27,7 +27,8 @@ func setupHandlers(router *mux.Router) {
 	GET := router.Methods("GET", "HEAD").Subrouter()
 	POST := router.Methods("POST").Subrouter()
 
-	GET.HandleFunc("/", httpHome)
+	GET.HandleFunc("/", httpTemplate("home"))
+	GET.HandleFunc("/signup", httpTemplate("signup"))
 
 	POST.HandleFunc("/login", apiLogin)
 	POST.HandleFunc("/logout", apiLogout)

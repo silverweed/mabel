@@ -6,8 +6,10 @@ import (
 	"net/http"
 )
 
-func httpHome(rw http.ResponseWriter, req *http.Request) {
-	send(rw, req, "home", "home", nil)
+func httpTemplate(template string) http.HandlerFunc {
+	return func(rw http.ResponseWriter, req *http.Request) {
+		send(rw, req, template, template, nil)
+	}
 }
 
 func send(rw http.ResponseWriter, req *http.Request,
