@@ -17,3 +17,6 @@ gulp:
 
 clean:
 	rm -f deps mabel gulp
+
+go-clean:
+	rm -f mabel
