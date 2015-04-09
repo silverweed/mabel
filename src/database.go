@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
@@ -32,6 +33,22 @@ func (db Database) GetLogin(username string) (hash []byte, err error) {
 	if err != nil {
 		return
 	}
-	hash = userdata.Password
+	hash = userdata.Data.Password
+	return
+}
+
+func (db Database) AddUser(username string, password []byte, email string) (id bson.ObjectId, err error) {
+	if len(username) < 1 || len(password) < 1 || len(email) < 1 {
+		err = errors.New("Empty fields in db.AddUser")
+		return
+	}
+	id = bson.NewObjectId()
+	user := UserData{
+		Id:       id,
+		Name:     username,
+		Password: password,
+		Email:    email,
+	}
+	err = db.database.C("users").Insert(user)
 	return
 }

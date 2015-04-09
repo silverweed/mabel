@@ -40,7 +40,7 @@ LoginButton = React.createClass {
                 if @state.toggled
                         <div className='widget'>
                             <h4 className='title'>{@title()}</h4>
-                            <form method='POST' action={@action()}>
+                            <form method='POST' action={@action()} name="login-form">
                                 <input type='text'
                                        name='name'
                                        placeholder='Username'/>
@@ -52,7 +52,8 @@ LoginButton = React.createClass {
                                 <RegisterInputs toggled={@state.regToggled} onClick={@showReg}/>
                                 <br/>
                                 <input type='submit'
-                                       value='Submit'/>
+                                       value='Submit'
+                                       onClick={@onSubmit}/>
                                 <button onClick={@toggle}>Cancel</button>
                             </form>
                         </div>
@@ -70,6 +71,8 @@ LoginButton = React.createClass {
         showReg: -> @setState { regToggled: yes }
         title: -> if @state.regToggled then 'Register' else 'Login'
         action: -> if @state.regToggled then '/register' else '/login'
+        onSubmit: ->
+                checkEmailField document.forms["login-form"]['email']
 }
 
 RegisterInputs = React.createClass {
@@ -79,6 +82,10 @@ RegisterInputs = React.createClass {
                             <input type='password'
                                    name='confirmpassword'
                                    placeholder='Confirm password'/>
+                            <br/>
+                            <input type='text'
+                                   name='invitecode'
+                                   placeholder='Your invite code'/>
                             <br/>
                             <input type='text'
                                    name='email'

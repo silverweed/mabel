@@ -76,11 +76,10 @@ func apiUserData(rw http.ResponseWriter, req *http.Request) {
 		Status: UserStatus{
 			Authenticated: false,
 		},
-		Name: "",
 	}
 	if !session.IsNew {
 		user.Status.Authenticated = true
-		user.Name, _ = session.Values["name"].(string)
+		user.Data.Name, _ = session.Values["name"].(string)
 	}
 	jsondata, err := json.Marshal(user)
 	if err != nil {

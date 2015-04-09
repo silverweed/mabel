@@ -1,4 +1,5 @@
 {
 	"Title": "Mabel",
-	"DataDir": "data"
+	"DataDir": "data",
+	"BCryptCost": 12
 }

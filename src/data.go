@@ -1,14 +1,23 @@
 package main
 
+import "gopkg.in/mgo.v2/bson"
+
 type MabelConf struct {
-	Title   string
-	DataDir string
+	Title      string
+	DataDir    string
+	BCryptCost int
 }
 
 type User struct {
-	Name     string `json:"name"`
+	Data   UserData   `json:"data"`
+	Status UserStatus `json:"status"`
+}
+
+type UserData struct {
+	Id       bson.ObjectId `_id`
+	Name     string        `json:"name"`
 	Password []byte
-	Status   UserStatus `json:"status"`
+	Email    string
 }
 
 type UserStatus struct {
