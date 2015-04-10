@@ -10,7 +10,6 @@ import (
 	"log"
 	"regexp"
 	"runtime/debug"
-	"unicode/utf8"
 )
 
 const (
@@ -34,32 +33,6 @@ func (u Users) Login(username, password string) bool {
 	return u.validate(password, hash)
 }
 
-// Register adds an user to the database, performing all due
-// checks and returning a bool describing the result of the operation.
-func (u Users) Register(username, password, email, invitecode string) bool {
-	if utf8.RuneCountInString(username) < minUsernameLen ||
-		len(password) < minPasswordLen ||
-		!u.isValidMail(email) {
-		return false
-	}
-	// Check if invite code exists
-	_, err := db.GetInviteCode(invitecode)
-	if err != nil {
-		return false
-	}
-	hash, err := u.encrypt(password)
-	if err != nil {
-		return false
-	}
-	id, err := db.AddUser(username, hash, email)
-	if err != nil {
-		return false
-	}
-	// Mark invite code as used
-	db.UseInviteCode(invitecode, id)
-	return true
-}
-
 // validate checks if a provided (non-hashed) password
 // matches a hashed value stored in the db
 func (u Users) validate(provided string, valid []byte) bool {
@@ -67,12 +40,13 @@ func (u Users) validate(provided string, valid []byte) bool {
 	return err == nil
 }
 
-func (u Users) encrypt(password string) (hash []byte, err error) {
+// encrypt generates a cryptographic hash of the given password
+func (u Users) Encrypt(password string) (hash []byte, err error) {
 	hash, err = bcrypt.GenerateFromPassword([]byte(password), mabelConf.BCryptCost)
 	return
 }
 
-func (u Users) isValidMail(email string) bool {
+func (u Users) IsValidMail(email string) bool {
 	// Translated from Javascript code of http://rosskendall.com/files/rfc822validemail.js.txt
 	sQtext := `[^\x0d\x22\x5c\x80-\xff]`
 	sDtext := `[^\x0d\x5b-\x5d\x80-\xff]`

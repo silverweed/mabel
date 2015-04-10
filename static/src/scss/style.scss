@@ -13,3 +13,9 @@ a.nohref {
 		margin: 5px auto;
 	}
 }
+form {
+	span[name="passmatch"] {
+		font-weight: bold;
+		color: red;
+	}
+}
