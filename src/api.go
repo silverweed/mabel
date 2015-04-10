@@ -25,7 +25,7 @@ func apiSignUp(rw http.ResponseWriter, req *http.Request) {
 		http.Error(rw, errstr, http.StatusBadRequest)
 		return
 	}
-	if !users.IsValidMail(email) {
+	if !isValidMail(email) {
 		http.Error(rw, "The mail you submitted is invalid", http.StatusBadRequest)
 		return
 	}
@@ -35,7 +35,7 @@ func apiSignUp(rw http.ResponseWriter, req *http.Request) {
 		http.Error(rw, "The invite code you used is invalid.", http.StatusTeapot)
 		return
 	}
-	hash, err := users.Encrypt(password)
+	hash, err := pswEncrypt(password)
 	if err != nil {
 		http.Error(rw, err.Error(), http.StatusInternalServerError)
 		return
