@@ -18,6 +18,8 @@ func (db Database) GetInviteCode(icode string) (code *InviteCode, err error) {
 	return
 }
 
+// UseInviteCode consumes the InviteCode with Code = icode and associates it
+// with a particolar User, in a one-to-one relation.
 func (db Database) UseInviteCode(icode string, usedBy bson.ObjectId) error {
 	op := mgo.Change{
 		Update: bson.M{

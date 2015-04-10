@@ -37,6 +37,9 @@ func (db Database) GetLogin(username string) (hash []byte, err error) {
 	return
 }
 
+// AddUser adds a new user (represented by a UserData struct) in the db,
+// without doing any validation aside requiring all parameters to be non-empty.
+// Returns the id of the newly created entry and possibly an error.
 func (db Database) AddUser(username string, password []byte, email string) (id bson.ObjectId, err error) {
 	if len(username) < 1 || len(password) < 1 || len(email) < 1 {
 		err = errors.New("Empty fields in db.AddUser")

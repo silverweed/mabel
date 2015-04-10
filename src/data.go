@@ -13,6 +13,7 @@ type User struct {
 	Status UserStatus `json:"status"`
 }
 
+// The user data stored in the db
 type UserData struct {
 	Id       bson.ObjectId `_id`
 	Name     string        `json:"name"`
@@ -21,6 +22,7 @@ type UserData struct {
 	Invite   bson.ObjectId
 }
 
+// Volatile user status, only valid during a session
 type UserStatus struct {
 	Authenticated bool `json:"authenticated"`
 }
