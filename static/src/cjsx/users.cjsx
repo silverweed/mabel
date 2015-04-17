@@ -17,14 +17,14 @@ window.UserWidget = React.createClass {
 
         render: ->
                 if @state.user?.status.authenticated
-                        <div>
+                        <div className='right'>
                             <h3>{@state.user.name}</h3>
                             <form method='POST' action='/logout'>
                                 <button type='submit'>Log out</button>
                             </form>
                         </div>
                 else
-                        <div>
+                        <div className='right'>
                             <LoginButton />
                         </div>
 }

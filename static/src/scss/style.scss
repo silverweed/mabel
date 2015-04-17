@@ -1,3 +1,25 @@
+body {
+	margin: 0;
+}
+// Top bar
+#topbar {
+	width: 101%;
+	height: 70px;
+	margin: 0;
+	position: relative;
+	left: -5px;
+	overflow: visible;
+	padding: 10px;
+	box-sizing: border-box;
+	box-shadow: 1px 1px 2px 0 black;
+}
+
+.right {
+	position: absolute;
+	right: 5px;
+	padding: 10px;
+}
+
 a.nohref {
 	cursor: pointer;
 	font-size: small;
@@ -12,10 +34,18 @@ a.nohref {
 	.title {
 		margin: 5px auto;
 	}
+	z-index: 3;
+	background-color: white;
+	box-shadow: 1px 1px 2px 0 black;
+	border-radius: 4px;
 }
+
 form {
 	span[name="passmatch"] {
 		font-weight: bold;
 		color: red;
+	}
+	button {
+		margin-top: 3px;
 	}
 }

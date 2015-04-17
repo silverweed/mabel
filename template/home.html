@@ -1,12 +1,8 @@
 <script src="/static/jsx/home.js"></script>
 <script>
 var container = document.getElementById('container');
-/*React.render(
-    React.createElement(Header, {name: "World"}),
-    container
-);*/
 React.render(
-    React.createElement(UserWidget, { source: '/userdata' }),
+    React.createElement(Home, { source: '/userdata' }),
     container
 );
 </script>

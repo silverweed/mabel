@@ -1,3 +1,8 @@
-window.Header = React.createClass {
-        render: -> return <div className="header">Hello, {@props.name}</div>
+window.Home = React.createClass {
+        render: ->
+                return (
+                        <div id='topbar'>
+                            <UserWidget source='/userdata'/>
+                        </div>
+                )
 }
