@@ -11,8 +11,8 @@ import (
 )
 
 const (
-	minUsernameLen = 2
-	minPasswordLen = 8
+	MIN_USERNAME_LEN = 2
+	MIN_PASSWORD_LEN = 8
 )
 
 type Users struct {
