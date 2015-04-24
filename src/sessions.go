@@ -32,6 +32,14 @@ func sessionDestroy(sess *sessions.Session, req *http.Request, rw http.ResponseW
 	sess.Save(req, rw)
 }
 
+// login performs the actual login, i.e. sets all the required session values.
+// The check on password is done by users.TryLogin, while the login HTTP request
+// is processed by apiLogin.
+func login(rw http.ResponseWriter, req *http.Request, session *sessions.Session, name string) error {
+	session.Values["name"] = name
+	return session.Save(req, rw)
+}
+
 // apiLogin is used to respond to authentication requests.
 // The login validation itself is performed by users.Login
 // in users.go.
@@ -48,15 +56,13 @@ func apiLogin(rw http.ResponseWriter, req *http.Request) {
 		return
 	}
 	// Validate login
-	if !users.Login(name, password) {
+	if !users.TryLogin(name, password) {
 		sessionDestroy(session, req, rw)
 		http.Error(rw, "Invalid credentials", http.StatusUnauthorized)
 		return
 	}
-	// Save session values
-	session.Values["name"] = name
-	err := session.Save(req, rw)
-	if err != nil {
+	// Perform actual login
+	if err := login(rw, req, session, name); err != nil {
 		panic(err)
 	}
 	http.Redirect(rw, req, "/", http.StatusMovedPermanently)

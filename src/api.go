@@ -30,8 +30,7 @@ func apiSignUp(rw http.ResponseWriter, req *http.Request) {
 		return
 	}
 	// Check if invite code exists
-	_, err := db.GetInviteCode(invitecode)
-	if err != nil {
+	if _, err := db.GetInviteCode(invitecode); err != nil {
 		http.Error(rw, "The invite code you used is invalid.", http.StatusTeapot)
 		return
 	}
@@ -47,9 +46,21 @@ func apiSignUp(rw http.ResponseWriter, req *http.Request) {
 		return
 	}
 	// Mark invite code as used
-	err = db.UseInviteCode(invitecode, id)
-	if err != nil {
+	if err = db.UseInviteCode(invitecode, id); err != nil {
 		http.Error(rw, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	// Send verification mail
+	if err = users.SendRegistrationMail(email); err != nil {
+		http.Error(rw, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// TODO
+	http.Redirect(rw, req, "/", http.StatusMovedPermanently)
+}
+
+// apiSearch performs search by tag on the database.
+func apiSearch(rw http.ResponseWriter, req *http.Request) {
+	http.Error(rw, "Not implemented yet", http.StatusNotImplemented)
 }

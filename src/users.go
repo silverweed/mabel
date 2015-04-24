@@ -1,8 +1,8 @@
-/**
- * The Users object manages users-related stuff, like
- * registration, login, existence check etc,
- * interfacing with a Database (mongoDB) object.
- */
+/*
+  The Users object manages users-related stuff, like
+  registration, login, existence check etc,
+  interfacing with a Database (mongoDB) object.
+*/
 package main
 
 import (
@@ -19,9 +19,9 @@ type Users struct {
 	db Database
 }
 
-// Login checks whether the given password is valid for user
+// TryLogin checks whether the given password is valid for user
 // `username` and returns a boolean result.
-func (u Users) Login(username, password string) bool {
+func (u Users) TryLogin(username, password string) bool {
 	hash, err := u.db.GetLogin(username)
 	if err != nil {
 		log.Fatal(err)
@@ -29,4 +29,9 @@ func (u Users) Login(username, password string) bool {
 		return false
 	}
 	return pswValidate(password, hash)
+}
+
+func (u Users) SendRegistrationMail(email string) error {
+	// TODO
+	return nil
 }
