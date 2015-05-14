@@ -7,6 +7,8 @@ package main
 
 import (
 	"log"
+	"errors"
+	"net/http"
 	"runtime/debug"
 )
 
@@ -34,4 +36,23 @@ func (u Users) TryLogin(username, password string) bool {
 func (u Users) SendRegistrationMail(email string) error {
 	// TODO
 	return nil
+}
+
+// GetBySession is used to retreive user data based on the client's
+// session token. Will return error != nil if the session token is
+// invalid (i.e. the user isn't logged in)
+func (u Users) GetBySession(req *http.Request) (user User, err error) {
+	session, err := store.Get(req, SESSION_NAME)
+	if err != nil {
+		// session couldn't be decoded
+		return
+	}
+	user.Status.Authenticated = false
+	if !session.IsNew {
+		user.Status.Authenticated = true
+		user.Data.Name, _ = session.Values["name"].(string)
+		return
+	}
+	err = errors.New("User is not authenticated")
+	return
 }

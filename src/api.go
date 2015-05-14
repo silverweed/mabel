@@ -103,15 +103,10 @@ func apiLogout(rw http.ResponseWriter, req *http.Request) {
 // apiUserData is used to retreive some session data by the client
 // via AJAX, like authentication status and username.
 func apiUserData(rw http.ResponseWriter, req *http.Request) {
-	session, _ := store.Get(req, SESSION_NAME)
-	user := User{
-		Status: UserStatus{
-			Authenticated: false,
-		},
-	}
-	if !session.IsNew {
-		user.Status.Authenticated = true
-		user.Data.Name, _ = session.Values["name"].(string)
+	user, err := users.GetBySession(req)
+	if err != nil {
+		http.Error(rw, "Login required", http.StatusUnauthorized)
+		return
 	}
 	jsondata, err := json.Marshal(user)
 	if err != nil {
@@ -119,4 +114,14 @@ func apiUserData(rw http.ResponseWriter, req *http.Request) {
 		return
 	}
 	fmt.Fprintln(rw, string(jsondata))
+}
+
+// apiFileUpload lets the user upload an image file to the server
+func apiFileUpload(rw http.ResponseWriter, req *http.Request) {
+	_, err := users.GetBySession(req)
+	if err != nil {
+		http.Error(rw, "Login required", http.StatusUnauthorized)
+		return
+	}
+	// TODO: file upload
 }
