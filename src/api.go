@@ -144,9 +144,9 @@ func apiFileUpload(rw http.ResponseWriter, req *http.Request) {
 		http.Error(rw, "File size is too big.", http.StatusRequestEntityTooLarge)
 		return
 	}
-	
+
 	// Check user quota
-	if user.Data.UsedQuota + size > user.Data.MaxQuota {
+	if user.Data.UsedQuota+size > user.Data.MaxQuota {
 		http.Error(rw, "You reached your file upload quota. Please delete some files before submitting new ones.",
 			http.StatusConflict)
 		return
@@ -158,7 +158,7 @@ func apiFileUpload(rw http.ResponseWriter, req *http.Request) {
 		http.Error(rw, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	
+
 	// Update user quota
 	db.IncQuota(user.Data.Id, size)
 

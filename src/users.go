@@ -6,8 +6,8 @@
 package main
 
 import (
-	"log"
 	"errors"
+	"log"
 	"net/http"
 	"runtime/debug"
 )

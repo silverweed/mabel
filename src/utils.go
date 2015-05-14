@@ -2,11 +2,11 @@ package main
 
 import (
 	"golang.org/x/crypto/bcrypt"
-	"regexp"
 	"io"
-	"os"
 	"mime/multipart"
+	"os"
 	"path"
+	"regexp"
 )
 
 // pswValidate checks if a provided (non-hashed) password
@@ -58,7 +58,7 @@ func upload(user User, file multipart.File, filename string) error {
 	if err != nil {
 		return err
 	}
-	defer out.Close();
+	defer out.Close()
 
 	// Copy data from form to data dir
 	if _, err := io.Copy(out, file); err != nil {

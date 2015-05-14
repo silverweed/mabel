@@ -3,11 +3,11 @@ package main
 import "gopkg.in/mgo.v2/bson"
 
 type MabelConf struct {
-	Title      string
-	DataDir    string
+	Title         string
+	DataDir       string
 	MaxUploadSize int64
-	BCryptCost int
-	UserQuota int64
+	BCryptCost    int
+	UserQuota     int64
 }
 
 type User struct {
@@ -17,12 +17,12 @@ type User struct {
 
 // The user data stored in the db
 type UserData struct {
-	Id       bson.ObjectId `_id`
-	Name     string        `json:"name"`
-	Password []byte
-	Email    string
-	Invite   bson.ObjectId
-	MaxQuota int64
+	Id        bson.ObjectId `_id`
+	Name      string        `json:"name"`
+	Password  []byte
+	Email     string
+	Invite    bson.ObjectId
+	MaxQuota  int64
 	UsedQuota int64
 }
 
