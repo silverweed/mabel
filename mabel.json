@@ -1,5 +1,7 @@
 {
 	"Title": "Mabel",
 	"DataDir": "data",
-	"BCryptCost": 12
+	"MaxUploadSize": 26214400,
+	"BCryptCost": 12,
+	"UserQuota": 2147483648
 }

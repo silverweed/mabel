@@ -3,6 +3,10 @@ package main
 import (
 	"golang.org/x/crypto/bcrypt"
 	"regexp"
+	"io"
+	"os"
+	"mime/multipart"
+	"path"
 )
 
 // pswValidate checks if a provided (non-hashed) password
@@ -37,4 +41,29 @@ func isValidMail(email string) bool {
 	reValidEmail := regexp.MustCompile(sValidEmail)
 
 	return reValidEmail.Match([]byte(email))
+}
+
+// upload gets data from 'file' and copies them in a path depending on
+// the 'user' who uploaded it
+func upload(user User, file multipart.File, filename string) error {
+	// TODO: this path is probably too naive and may be reworked later (note: /f/ stands for 'files')
+	basePath := path.Join(mabelConf.DataDir, user.Data.Name, "f")
+	// Ensure directory exists
+	err := os.MkdirAll(basePath, os.ModeDir)
+	if err != nil {
+		return err
+	}
+	// Create the file (TODO: the filename should be unique-d, rather than using the actual filename)
+	out, err := os.Create(path.Join(basePath, filename))
+	if err != nil {
+		return err
+	}
+	defer out.Close();
+
+	// Copy data from form to data dir
+	if _, err := io.Copy(out, file); err != nil {
+		return err
+	}
+
+	return nil
 }

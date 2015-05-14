@@ -5,7 +5,9 @@ import "gopkg.in/mgo.v2/bson"
 type MabelConf struct {
 	Title      string
 	DataDir    string
+	MaxUploadSize int64
 	BCryptCost int
+	UserQuota int64
 }
 
 type User struct {
@@ -20,6 +22,8 @@ type UserData struct {
 	Password []byte
 	Email    string
 	Invite   bson.ObjectId
+	MaxQuota int64
+	UsedQuota int64
 }
 
 // Volatile user status, only valid during a session

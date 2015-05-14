@@ -51,7 +51,17 @@ func (db Database) AddUser(username string, password []byte, email string) (id b
 		Name:     username,
 		Password: password,
 		Email:    email,
+		MaxQuota: mabelConf.UserQuota,
 	}
 	err = db.database.C("users").Insert(user)
 	return
+}
+
+// IncQuota increments `userId`'s quota usage by `size`.
+func (db Database) IncQuota(userId bson.ObjectId, size int64) error {
+	return db.database.C("users").UpdateId(userId, bson.M{
+		"$inc": bson.M{
+			"usedquota": size,
+		},
+	})
 }

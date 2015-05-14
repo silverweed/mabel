@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
 	"unicode/utf8"
 )
 
@@ -118,10 +119,49 @@ func apiUserData(rw http.ResponseWriter, req *http.Request) {
 
 // apiFileUpload lets the user upload an image file to the server
 func apiFileUpload(rw http.ResponseWriter, req *http.Request) {
-	_, err := users.GetBySession(req)
+	user, err := users.GetBySession(req)
 	if err != nil {
 		http.Error(rw, "Login required", http.StatusUnauthorized)
 		return
 	}
-	// TODO: file upload
+	// Get file from form
+	file, header, err := req.FormFile("file")
+	if err != nil {
+		http.Error(rw, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	defer file.Close()
+
+	// Check file size
+	lenstr := header.Header.Get("Content-length")
+	if len(lenstr) < 1 {
+		http.Error(rw, "Length required", http.StatusLengthRequired)
+		return
+	}
+	size, err := strconv.ParseInt(lenstr, 10, 64)
+	if err != nil || size > mabelConf.MaxUploadSize {
+		http.Error(rw, "File size is too big.", http.StatusRequestEntityTooLarge)
+		return
+	}
+	
+	// Check user quota
+	if user.Data.UsedQuota + size > user.Data.MaxQuota {
+		http.Error(rw, "You reached your file upload quota. Please delete some files before submitting new ones.",
+			http.StatusConflict)
+		return
+	}
+
+	// Do the actual upload
+	err = upload(user, file, header.Filename)
+	if err != nil {
+		http.Error(rw, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	
+	// Update user quota
+	db.IncQuota(user.Data.Id, size)
+
+	// TODO: show success message
+	http.Redirect(rw, req, "/", http.StatusMovedPermanently)
 }
