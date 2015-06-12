@@ -1,14 +1,18 @@
 {
-	"name": "mabel",
-	"version": "0.0.0",
-	"dependencies": {},
-	"devDependencies": {
-		"gulp": "*",
-		"gulp-sass": ">=2.0.0",
-		"gulp-cjsx": "*",
-		"gulp-util": "*"
-	},
-	"engines": {
-		"node": ">=0.10.29"
-	}
+  "name": "mabel",
+  "version": "0.0.0",
+  "dependencies": {
+    "coffee-script": "^1.9.3"
+  },
+  "devDependencies": {
+    "gulp": "*",
+    "gulp-sass": ">=2.0.0",
+    "gulp-riot": "*",
+    "gulp-coffee": "*",
+    "gulp-sourcemaps": "*",
+    "gulp-util": "*"
+  },
+  "engines": {
+    "node": ">=0.10.29"
+  }
 }

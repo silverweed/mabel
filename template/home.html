@@ -1,8 +1,6 @@
-<script src="/static/jsx/home.js"></script>
+<topbar />
+
+<script src="/static/riot/topbar.js"></script>
 <script>
-var container = document.getElementById('container');
-React.render(
-    React.createElement(Home),
-    container
-);
+	riot.mount("topbar");
 </script>
