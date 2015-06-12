@@ -1,8 +1,8 @@
 mabel
 node_modules
 static/js
-static/jsx
 static/css
+static/riot
 *~
 *.swp
 deps
