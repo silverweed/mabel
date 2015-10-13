@@ -1,30 +1,29 @@
 'use strict';
 var gulp = require('gulp');
 var sass = require('gulp-sass');
-var riot = require('gulp-riot');
+//var compass = require('gulp-compass');
+var cjsx = require('gulp-cjsx');
 var gutil = require('gulp-util');
-var coffee = require('gulp-coffee');
-var sourcemaps = require('gulp-sourcemaps');
+var path = require('path');
 
 var paths = {
 	coffee: 'static/src/coffee/*.coffee',
-	riot: 'static/src/riot/*.tag',
+	cjsx: 'static/src/cjsx/*.cjsx',
 	scss: 'static/src/scss/*.scss'
 };
 
 // Coffeescript
 gulp.task('coffee', function () {
 	return gulp.src(paths.coffee)
-		.pipe(sourcemaps.init())
-		.pipe(coffee({ bare: false }).on('error', gutil.log))
-		.pipe(sourcemaps.write())
+		.pipe(cjsx({ bare: false }).on('error', gutil.log))
 		.pipe(gulp.dest('static/js'));
 });
 
-gulp.task('riot', function () {
-	return gulp.src(paths.riot)
-		.pipe(riot({type: "coffee"}))
-		.pipe(gulp.dest('static/riot'));
+// Coffeescript-React
+gulp.task('cjsx', function () {
+	return gulp.src(paths.cjsx)
+		.pipe(cjsx({ bare: false }).on('error', gutil.log))
+		.pipe(gulp.dest('static/jsx'));
 });
 
 // Scss
@@ -45,10 +44,10 @@ gulp.task('sass', function () {
 		.pipe(gulp.dest('static/css'));
 });*/
 
-gulp.task('build', ['coffee', 'riot', 'sass']);
+gulp.task('build', ['coffee', 'cjsx', 'sass']);
 // FIXME: crashes on error!
 gulp.task('watch', function () {
 	gulp.watch(paths.coffee, ['coffee']).on('error', gutil.log);
-	gulp.watch(paths.riot, ['riot']).on('error', gutil.log);
+	gulp.watch(paths.cjsx, ['cjsx']).on('error', gutil.log);
 	gulp.watch(paths.scss, ['sass']).on('error', gutil.log);
 });
